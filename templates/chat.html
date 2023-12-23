@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+</head>
+<body>
+    <div class="chat-container">
+        <h1>Simple Chat</h1>
+        <form id="chat_form" class="chat-form">
+            <input type="text" id="message_input" placeholder="Enter your message">
+            <button type="submit">Send</button>
+        </form>
+        <ul id="messages" class="messages">
+            <!-- Messages will be displayed here -->
+        </ul>
+    </div>
+
+    <script>
+        const ws = new WebSocket("wss://fast-chat-769dfc347d36.herokuapp.com/ws");
+        // const ws = new WebSocket("ws://localhost:8000/ws"); //local test
+        const messagesUl = document.getElementById("messages");
+        const form = document.getElementById("chat_form");
+        const messageInput = document.getElementById("message_input");
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+            const message = messageInput.value;
+            ws.send(message);
+            messagesUl.innerHTML += `<li>User: ${message}</li>`;
+            messageInput.value = '';
+        });
+
+        ws.onmessage = function(event) {
+            const message = event.data;
+            messagesUl.innerHTML += `<li>${message}</li>`;
+        };
+
+        ws.onclose = function(event) {
+            messagesUl.innerHTML += `<li><i>Disconnected...</i></li>`;
+        };
+    </script>
+</body>
+</html>

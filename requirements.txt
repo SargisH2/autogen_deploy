@@ -1,0 +1,8 @@
+beautifulsoup4==4.12.2
+fastapi==0.105.0
+langchain==0.0.350
+pyautogen==0.2.1
+Requests==2.31.0
+uvicorn
+jinja2
+websockets
